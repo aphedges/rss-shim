@@ -24,11 +24,11 @@ while True:
     for url in seen_urls[:10]:
         items.append(f'''
          <item>
+      <id>Rae the Doe {url[-10:]}</id>
       <title>Rae the Doe {url[-10:]}</title>
       <description>Here is some text containing an interesting description.</description>
       <link>{url}</link>
-      <guid isPermaLink="false">7bd204c6-1655-4c27-aeee-53f933c5395f</guid>
-      <pubDate>Sun, 6 Sep 2009 16:20:00 +0000</pubDate>
+      <pubDate>{url[-10:]}</pubDate>
      </item>
      ''')
 
