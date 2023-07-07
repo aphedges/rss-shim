@@ -10,13 +10,14 @@ else:
     seen_urls = []
 
 
-while True:
+def scrape_comic():
     print(seen_urls)
     page_text = requests.get('https://comicskingdom.com/rae-the-doe').text
     # maybe switch to `<link rel="canonical" href="https://comicskingdom.com/rae-the-doe/2023-03-08" />` instead of `<meta property="og:url" content='https://comicskingdom.com/rae-the-doe/2023-03-08' />`
     target_tag = [line for line in page_text.splitlines() if line.startswith('<meta property="og:url"')][0]
     comic_url = target_tag[target_tag.find("'") + 1: target_tag.rfind("'")]
     if comic_url not in seen_urls:
+        print(f"Found new URL: {comic_url!r}")
         seen_urls.insert(0, comic_url)
         json.dump(seen_urls, open('cache.json', 'w'))
 
@@ -51,6 +52,12 @@ while True:
     </rss>
     '''
     open('feed.rss', 'w').write(rss_feed)
+
+while True:
+    try:
+        scrape_comic()
+    except Exception as ex:
+        print(f"Scraping failed with error: {ex}")
     sleep_time = int((30 + random.uniform(-2, 2)) * 60 )
     print(sleep_time)
     time.sleep(sleep_time)
