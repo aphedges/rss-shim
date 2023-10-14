@@ -4,8 +4,14 @@ import json
 import time
 import random
 
-if Path('cache.json').is_file():
-    seen_urls = json.load(open('cache.json'))
+DATA_DIR = Path('data').resolve()
+DATA_DIR.mkdir(parents=True, exist_ok=True)
+
+CACHE_FILE = DATA_DIR / 'cache.json'
+FEED_FILE = DATA_DIR / 'feed.rss'
+
+if CACHE_FILE.is_file():
+    seen_urls = json.load(open(CACHE_FILE))
 else:
     seen_urls = []
 
@@ -19,7 +25,7 @@ def scrape_comic():
     if comic_url not in seen_urls:
         print(f"Found new URL: {comic_url!r}")
         seen_urls.insert(0, comic_url)
-        json.dump(seen_urls, open('cache.json', 'w'))
+        json.dump(seen_urls, open(CACHE_FILE, 'w'))
 
     items = []
     for url in seen_urls[:10]:
@@ -51,7 +57,7 @@ def scrape_comic():
     </channel>
     </rss>
     '''
-    open('feed.rss', 'w').write(rss_feed)
+    open(FEED_FILE, 'w').write(rss_feed)
 
 while True:
     try:
