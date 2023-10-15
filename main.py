@@ -1,14 +1,15 @@
-import requests
-from pathlib import Path
 import json
-import time
+from pathlib import Path
 import random
+import time
 
-DATA_DIR = Path('data').resolve()
+import requests
+
+DATA_DIR = Path("data").resolve()
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 
-CACHE_FILE = DATA_DIR / 'cache.json'
-FEED_FILE = DATA_DIR / 'feed.rss'
+CACHE_FILE = DATA_DIR / "cache.json"
+FEED_FILE = DATA_DIR / "feed.rss"
 
 if CACHE_FILE.is_file():
     seen_urls = json.load(open(CACHE_FILE))
@@ -18,18 +19,21 @@ else:
 
 def scrape_comic():
     print(seen_urls)
-    page_text = requests.get('https://comicskingdom.com/rae-the-doe').text
+    page_text = requests.get("https://comicskingdom.com/rae-the-doe").text
     # maybe switch to `<link rel="canonical" href="https://comicskingdom.com/rae-the-doe/2023-03-08" />` instead of `<meta property="og:url" content='https://comicskingdom.com/rae-the-doe/2023-03-08' />`
-    target_tag = [line for line in page_text.splitlines() if line.startswith('<meta property="og:url"')][0]
-    comic_url = target_tag[target_tag.find("'") + 1: target_tag.rfind("'")]
+    target_tag = [
+        line for line in page_text.splitlines() if line.startswith('<meta property="og:url"')
+    ][0]
+    comic_url = target_tag[target_tag.find("'") + 1 : target_tag.rfind("'")]
     if comic_url not in seen_urls:
         print(f"Found new URL: {comic_url!r}")
         seen_urls.insert(0, comic_url)
-        json.dump(seen_urls, open(CACHE_FILE, 'w'))
+        json.dump(seen_urls, open(CACHE_FILE, "w"))
 
     items = []
     for url in seen_urls[:10]:
-        items.append(f'''
+        items.append(
+            f"""
          <item>
       <id>Rae the Doe {url[-10:]}</id>
       <title>Rae the Doe {url[-10:]}</title>
@@ -37,11 +41,12 @@ def scrape_comic():
       <link>{url}</link>
       <pubDate>{url[-10:]}</pubDate>
      </item>
-     ''')
+     """
+        )
 
-    joined_items = '\n'.join(items)
+    joined_items = "\n".join(items)
 
-    rss_feed = f'''<?xml version="1.0" encoding="UTF-8" ?>
+    rss_feed = f"""<?xml version="1.0" encoding="UTF-8" ?>
     <rss version="2.0">
     <channel>
      <title>Rae the Doe</title>
@@ -56,14 +61,15 @@ def scrape_comic():
 
     </channel>
     </rss>
-    '''
-    open(FEED_FILE, 'w').write(rss_feed)
+    """
+    open(FEED_FILE, "w").write(rss_feed)
+
 
 while True:
     try:
         scrape_comic()
     except Exception as ex:
         print(f"Scraping failed with error: {ex}")
-    sleep_time = int((30 + random.uniform(-2, 2)) * 60 )
+    sleep_time = int((30 + random.uniform(-2, 2)) * 60)
     print(sleep_time)
     time.sleep(sleep_time)
