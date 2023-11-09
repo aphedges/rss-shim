@@ -2,5 +2,4 @@ FROM python:3.11-slim
 WORKDIR /app
 RUN pip install requests
 COPY main.py .
-EXPOSE 80
-CMD ["/bin/bash", "-c", "python -u main.py & python -u -m http.server 80 --bind 0.0.0.0 --directory data/"]
+CMD ["/bin/bash", "-c", "python -u main.py"]
