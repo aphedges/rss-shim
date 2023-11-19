@@ -1,13 +1,11 @@
 """A service to create RSS feeds for sites that do not support them."""
 import json
-from pathlib import Path
 import random
 import time
 
 import requests
 
-DATA_DIR = Path("data").resolve()
-DATA_DIR.mkdir(parents=True, exist_ok=True)
+from rss_shim.paths import DATA_DIR
 
 CACHE_FILE = DATA_DIR / "cache.json"
 FEED_FILE = DATA_DIR / "feed.rss"
