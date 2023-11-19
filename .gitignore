@@ -1,2 +1,6 @@
 # Project files
 /data/
+
+# Python files
+/.mypy_cache/
+__pycache__/

@@ -16,6 +16,8 @@ Currently, the server provides a single feed, `feed.rss`, from port 80. I will b
 
 ## Contributing
 
+All contributions must pass `make check` without any errors.
+
 Feel free to improve shims I already have, but you are likely better off contributing to larger, existing projects, such as [RSS-Bridge](https://github.com/RSS-Bridge/rss-bridge). I will not accept shims for services I do not use, so create an issue first if you want to implement one.
 
 ## License
