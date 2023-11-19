@@ -67,11 +67,17 @@ def scrape_comic() -> None:
     open(FEED_FILE, "w", encoding="utf-8").write(rss_feed)
 
 
-while True:
-    try:
-        scrape_comic()
-    except Exception as ex:  # pylint: disable=broad-exception-caught
-        print(f"Scraping failed with error: {ex}")
-    sleep_time = int((30 + random.uniform(-2, 2)) * 60)
-    print(sleep_time)
-    time.sleep(sleep_time)
+def main() -> None:
+    """Scrape sites repeatedly, handling errors and waiting as needed."""
+    while True:
+        try:
+            scrape_comic()
+        except Exception as ex:  # pylint: disable=broad-exception-caught
+            print(f"Scraping failed with error: {ex}")
+        sleep_time = int((30 + random.uniform(-2, 2)) * 60)
+        print(sleep_time)
+        time.sleep(sleep_time)
+
+
+if __name__ == "__main__":
+    main()

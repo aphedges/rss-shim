@@ -1,5 +1,7 @@
 FROM python:3.11-slim
 WORKDIR /app
-RUN pip install requests
-COPY main.py .
-CMD ["/bin/bash", "-c", "python -u main.py"]
+COPY LICENSE README.md pyproject.toml setup.cfg setup.py ./
+RUN pip install .
+COPY src/ src/
+RUN pip install .
+CMD ["/bin/bash", "-c", "python -u -m rss_shim"]

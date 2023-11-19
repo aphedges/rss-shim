@@ -4,3 +4,4 @@
 # Python files
 /.mypy_cache/
 __pycache__/
+rss_shim.egg-info/

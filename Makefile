@@ -56,4 +56,4 @@ check: precommit mypy pylint
 .PHONY: install update
 install update:
 	pip install --upgrade pip setuptools wheel
-	pip install --upgrade --upgrade-strategy eager -r requirements-dev.txt requests
+	pip install --upgrade --upgrade-strategy eager -e .[dev]
