@@ -1,3 +1,4 @@
+"""A service to create RSS feeds for sites that do not support them."""
 import json
 from pathlib import Path
 import random
@@ -12,14 +13,15 @@ CACHE_FILE = DATA_DIR / "cache.json"
 FEED_FILE = DATA_DIR / "feed.rss"
 
 if CACHE_FILE.is_file():
-    seen_urls = json.load(open(CACHE_FILE))
+    seen_urls = json.load(open(CACHE_FILE, encoding="utf-8"))
 else:
     seen_urls = []
 
 
-def scrape_comic():
+def scrape_comic() -> None:
+    """Scrape _Rae the Doe_ and generate an RSS feed for it."""
     print(seen_urls)
-    page_text = requests.get("https://comicskingdom.com/rae-the-doe").text
+    page_text = requests.get("https://comicskingdom.com/rae-the-doe", timeout=30).text
     # maybe switch to `<link rel="canonical" href="https://comicskingdom.com/rae-the-doe/2023-03-08" />` instead of `<meta property="og:url" content='https://comicskingdom.com/rae-the-doe/2023-03-08' />`
     target_tag = [
         line for line in page_text.splitlines() if line.startswith('<meta property="og:url"')
@@ -28,7 +30,7 @@ def scrape_comic():
     if comic_url not in seen_urls:
         print(f"Found new URL: {comic_url!r}")
         seen_urls.insert(0, comic_url)
-        json.dump(seen_urls, open(CACHE_FILE, "w"))
+        json.dump(seen_urls, open(CACHE_FILE, "w", encoding="utf-8"))
 
     items = []
     for url in seen_urls[:10]:
@@ -62,13 +64,13 @@ def scrape_comic():
     </channel>
     </rss>
     """
-    open(FEED_FILE, "w").write(rss_feed)
+    open(FEED_FILE, "w", encoding="utf-8").write(rss_feed)
 
 
 while True:
     try:
         scrape_comic()
-    except Exception as ex:
+    except Exception as ex:  # pylint: disable=broad-exception-caught
         print(f"Scraping failed with error: {ex}")
     sleep_time = int((30 + random.uniform(-2, 2)) * 60)
     print(sleep_time)
