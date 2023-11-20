@@ -14,41 +14,28 @@ def generate_feed(feed_data: dict[str, Any]) -> str:
     """
     xml_items = []
     for item in feed_data["items"]:
-        xml_items.append(
-            f"""
-         <item>
-      <id>{item['id']}</id>
-      <title>{item['title']}</title>
-      <description>{item['description']}</description>
-      <link>{item['link']}</link>
-      <pubDate>{item['pubDate']}</pubDate>
-     </item>
-     """
-        )
+        xml_item = ET.Element("item")
+        ET.SubElement(xml_item, "id").text = item["id"]
+        ET.SubElement(xml_item, "title").text = item["title"]
+        ET.SubElement(xml_item, "description").text = item["description"]
+        ET.SubElement(xml_item, "link").text = item["link"]
+        ET.SubElement(xml_item, "pubDate").text = item["pubDate"]
+        xml_items.append(xml_item)
 
-    joined_items = "\n".join(xml_items)
-
-    rss_feed = f"""<?xml version="1.0" encoding="UTF-8" ?>
-    <rss version="2.0">
-    <channel>
-     <title>{feed_data['title']}</title>
-     <description>{feed_data['description']}</description>
-     <link>{feed_data['link']}</link>
-     <copyright>{feed_data['copyright']}</copyright>
-     <lastBuildDate>{feed_data['lastBuildDate']}</lastBuildDate>
-     <pubDate>{feed_data['pubDate']}</pubDate>
-     <ttl>{feed_data['ttl']}</ttl>
-
-     {joined_items}
-
-    </channel>
-    </rss>
-    """
+    rss = ET.Element("rss", attrib={"version": "2.0"})
+    channel = ET.SubElement(rss, "channel")
+    ET.SubElement(channel, "title").text = feed_data["title"]
+    ET.SubElement(channel, "description").text = feed_data["description"]
+    ET.SubElement(channel, "link").text = feed_data["link"]
+    ET.SubElement(channel, "copyright").text = feed_data["copyright"]
+    ET.SubElement(channel, "lastBuildDate").text = feed_data["lastBuildDate"]
+    ET.SubElement(channel, "pubDate").text = feed_data["pubDate"]
+    ET.SubElement(channel, "ttl").text = feed_data["ttl"]
+    channel.extend(xml_items)
 
     # Pretty print XML
-    element = ET.XML(rss_feed)
-    ET.indent(element)
-    rss_feed = ET.tostring(element, encoding="unicode", xml_declaration=True)
+    ET.indent(rss)
+    rss_feed = ET.tostring(rss, encoding="unicode", xml_declaration=True)
     rss_feed += "\n"
 
     return rss_feed
