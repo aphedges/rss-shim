@@ -1,5 +1,6 @@
 """A module for generating RSS feeds."""
 from typing import Any
+import xml.etree.ElementTree as ET
 
 
 def generate_feed(feed_data: dict[str, Any]) -> str:
@@ -43,4 +44,11 @@ def generate_feed(feed_data: dict[str, Any]) -> str:
     </channel>
     </rss>
     """
+
+    # Pretty print XML
+    element = ET.XML(rss_feed)
+    ET.indent(element)
+    rss_feed = ET.tostring(element, encoding="unicode", xml_declaration=True)
+    rss_feed += "\n"
+
     return rss_feed
