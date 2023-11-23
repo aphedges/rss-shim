@@ -1,4 +1,5 @@
 """A service to create RSS feeds for sites that do not support them."""
+import datetime as dt
 import json
 import random
 import time
@@ -33,13 +34,14 @@ def scrape_comic() -> None:
 
     items = []
     for url in seen_urls[:10]:
+        pub_date = dt.datetime.strptime(url[-10:], "%Y-%m-%d")
+        pub_date = pub_date.replace(tzinfo=dt.UTC)
         items.append(
             {
-                "id": f"Rae the Doe {url[-10:]}",
                 "title": f"Rae the Doe {url[-10:]}",
                 "description": "Here is some text containing an interesting description.",
                 "link": url,
-                "pubDate": url[-10:],
+                "pubDate": pub_date,
             }
         )
 
