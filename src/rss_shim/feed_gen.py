@@ -37,7 +37,7 @@ def generate_feed(feed_data: dict[str, Any]) -> str:
         ET.SubElement(xml_item, "pubDate").text = to_rfc822_datetime(item["pubDate"])
         xml_items.append(xml_item)
 
-    rss = ET.Element("rss", attrib={"version": "2.0"})
+    rss = ET.Element("rss", attrib={"version": "2.0", "xmlns:atom": "http://www.w3.org/2005/Atom"})
     channel = ET.SubElement(rss, "channel")
     ET.SubElement(channel, "title").text = feed_data["title"]
     ET.SubElement(channel, "description").text = feed_data["description"]
@@ -46,6 +46,11 @@ def generate_feed(feed_data: dict[str, Any]) -> str:
     ET.SubElement(channel, "lastBuildDate").text = feed_data["lastBuildDate"]
     ET.SubElement(channel, "pubDate").text = feed_data["pubDate"]
     ET.SubElement(channel, "ttl").text = feed_data["ttl"]
+    ET.SubElement(
+        channel,
+        "atom:link",
+        attrib={"href": feed_data["url"], "rel": "self", "type": "application/rss+xml"},
+    )
     channel.extend(xml_items)
 
     # Pretty print XML

@@ -3,9 +3,11 @@ import datetime as dt
 import json
 import random
 import time
+import urllib.parse
 
 import requests
 
+from rss_shim.config import FEED_URL_ORIGIN
 from rss_shim.feed_gen import generate_feed
 from rss_shim.paths import DATA_DIR
 
@@ -53,6 +55,7 @@ def scrape_comic() -> None:
         "lastBuildDate": "Mon, 6 Sep 2010 00:01:00 +0000",
         "pubDate": "Sun, 6 Sep 2009 16:20:00 +0000",
         "ttl": "1800",
+        "url": urllib.parse.urljoin(FEED_URL_ORIGIN, "feed.rss"),
         "items": items,
     }
     rss_feed = generate_feed(feed_data)
