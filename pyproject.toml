@@ -35,6 +35,10 @@ convention = "google"
 # Let Black handle line length
 max-line-length = 300
 
+[tool.pylint.imports]
+# Need to either set this or stop using the `import X as X` that mypy wants
+allow-reexport-from-package = true
+
 [tool.pylint.messages_control]
 # Most of these are disabled to prevent issues with dependencies being difficult to inspect
 # pylint FAQ recommends disabling:
