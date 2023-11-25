@@ -54,11 +54,16 @@ def scrape_comic() -> None:
             )
         )
 
+    if FEED_URL_ORIGIN:
+        feed_url = urllib.parse.urljoin(FEED_URL_ORIGIN, str(FEED_FILE.relative_to(FEED_DIR)))
+    else:
+        feed_url = None
+
     feed = RssFeed(
         title="Rae the Doe",
         description="Recent comic strips for Rae the Doe",
         link="https://comicskingdom.com/rae-the-doe",
-        url=urllib.parse.urljoin(FEED_URL_ORIGIN, str(FEED_FILE.relative_to(FEED_DIR))),
+        url=feed_url,
         items=items,
     )
     rss_text = pretty_print_xml(feed.to_xml())
