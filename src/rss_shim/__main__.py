@@ -56,11 +56,11 @@ def scrape_comic() -> None:
         "link": "https://comicskingdom.com/rae-the-doe",
         "copyright": "CC0 1.0 Universal (CC0 1.0) Public Domain Dedication",
         "copyrightUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "generator": f"{__package__} v{importlib.metadata.version(__package__)}",
+        "language": "en-us",
         "lastBuildDate": now(),
         "pubDate": max(item["pubDate"] for item in items),
         "ttl": 30,
-        "language": "en-us",
-        "generator": f"{__package__} v{importlib.metadata.version(__package__)}",
         "url": urllib.parse.urljoin(FEED_URL_ORIGIN, "feed.rss"),
         "items": items,
     }

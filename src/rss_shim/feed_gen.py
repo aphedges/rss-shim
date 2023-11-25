@@ -50,19 +50,19 @@ def generate_feed(feed_data: dict[str, Any]) -> str:
     ET.SubElement(channel, "title").text = feed_data["title"]
     ET.SubElement(channel, "description").text = feed_data["description"]
     ET.SubElement(channel, "link").text = feed_data["link"]
-    ET.SubElement(channel, "copyright").text = feed_data["copyright"]
-    ET.SubElement(channel, "lastBuildDate").text = to_rfc822_datetime(feed_data["lastBuildDate"])
-    ET.SubElement(channel, "pubDate").text = to_rfc822_datetime(feed_data["pubDate"])
-    ET.SubElement(channel, "ttl").text = str(feed_data["ttl"])
-    ET.SubElement(channel, "language").text = feed_data["language"]
-    ET.SubElement(channel, "generator").text = feed_data["generator"]
-    ET.SubElement(channel, "docs").text = "https://www.rssboard.org/rss-specification"
     ET.SubElement(
         channel,
         "atom:link",
         attrib={"href": feed_data["url"], "rel": "self", "type": "application/rss+xml"},
     )
+    ET.SubElement(channel, "copyright").text = feed_data["copyright"]
     ET.SubElement(channel, "creativeCommons:license").text = feed_data["copyrightUrl"]
+    ET.SubElement(channel, "docs").text = "https://www.rssboard.org/rss-specification"
+    ET.SubElement(channel, "generator").text = feed_data["generator"]
+    ET.SubElement(channel, "language").text = feed_data["language"]
+    ET.SubElement(channel, "lastBuildDate").text = to_rfc822_datetime(feed_data["lastBuildDate"])
+    ET.SubElement(channel, "pubDate").text = to_rfc822_datetime(feed_data["pubDate"])
+    ET.SubElement(channel, "ttl").text = str(feed_data["ttl"])
     channel.extend(xml_items)
 
     # Pretty print XML
