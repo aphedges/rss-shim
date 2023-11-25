@@ -32,7 +32,9 @@ else:
 def scrape_comic() -> None:
     """Scrape _Rae the Doe_ and generate an RSS feed for it."""
     logger.info("Seen URLs: %s", seen_urls)
-    page_text = requests.get("https://comicskingdom.com/rae-the-doe", timeout=30).text
+    response = requests.get("https://comicskingdom.com/rae-the-doe", timeout=30)
+    response.raise_for_status()
+    page_text = response.text
     # Parse URL from `<link rel="canonical" href="https://comicskingdom.com/rae-the-doe/2023-03-08" />`
     soup = BeautifulSoup(page_text, features="html.parser")
     canonical_urls = [link["href"] for link in soup.findAll("link", attrs={"rel": "canonical"})]
