@@ -17,7 +17,7 @@ CACHE_FILE = DATA_DIR / "cache.json"
 FEED_FILE = DATA_DIR / "feed.rss"
 
 if CACHE_FILE.is_file():
-    seen_urls = json.load(open(CACHE_FILE, encoding="utf-8"))
+    seen_urls = json.loads(CACHE_FILE.read_text(encoding="utf-8"))
 else:
     seen_urls = []
 
@@ -35,7 +35,7 @@ def scrape_comic() -> None:
     if comic_url not in seen_urls:
         print(f"Found new URL: {comic_url!r}")
         seen_urls.insert(0, comic_url)
-        json.dump(seen_urls, open(CACHE_FILE, "w", encoding="utf-8"))
+        CACHE_FILE.write_text(json.dumps(seen_urls), encoding="utf-8")
 
     items = []
     for url in seen_urls[:10]:
@@ -57,7 +57,7 @@ def scrape_comic() -> None:
         items=items,
     )
     rss_text = pretty_print_xml(feed.to_xml())
-    open(FEED_FILE, "w", encoding="utf-8").write(rss_text)
+    FEED_FILE.write_text(rss_text, encoding="utf-8")
 
 
 def main() -> None:
