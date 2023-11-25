@@ -11,7 +11,7 @@ import requests
 from rss_shim.config import FEED_URL_ORIGIN
 from rss_shim.feed_gen import RssFeed, RssFeedItem
 from rss_shim.paths import DATA_DIR
-from rss_shim.utils import pretty_print_xml
+from rss_shim.utils import pretty_print_xml, write_json
 
 CACHE_FILE = DATA_DIR / "cache.json"
 FEED_FILE = DATA_DIR / "feed.rss"
@@ -35,7 +35,7 @@ def scrape_comic() -> None:
     if comic_url not in seen_urls:
         print(f"Found new URL: {comic_url!r}")
         seen_urls.insert(0, comic_url)
-        CACHE_FILE.write_text(json.dumps(seen_urls), encoding="utf-8")
+        write_json(seen_urls, CACHE_FILE)
 
     items = []
     for url in seen_urls[:10]:
