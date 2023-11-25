@@ -13,6 +13,6 @@ COPY pyproject.toml .
 COPY setup.cfg .
 COPY setup.py .
 COPY src/ src/
-RUN pip install --no-cache-dir .
+RUN pip install --no-cache-dir --no-deps .
 
 CMD ["/bin/bash", "-c", "python -u -m rss_shim"]
