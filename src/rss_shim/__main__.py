@@ -1,6 +1,5 @@
 """A service to create RSS feeds for sites that do not support them."""
 import datetime as dt
-import importlib.metadata
 import json
 import random
 import time
@@ -10,9 +9,9 @@ from bs4 import BeautifulSoup
 import requests
 
 from rss_shim.config import FEED_URL_ORIGIN
-from rss_shim.feed_gen import generate_feed
+from rss_shim.feed_gen import RssFeed, RssFeedItem
 from rss_shim.paths import DATA_DIR
-from rss_shim.utils import now
+from rss_shim.utils import pretty_print_xml
 
 CACHE_FILE = DATA_DIR / "cache.json"
 FEED_FILE = DATA_DIR / "feed.rss"
@@ -43,29 +42,22 @@ def scrape_comic() -> None:
         pub_date = dt.datetime.strptime(url[-10:], "%Y-%m-%d")
         pub_date = pub_date.replace(tzinfo=dt.UTC)
         items.append(
-            {
-                "title": f"Rae the Doe {url[-10:]}",
-                "link": url,
-                "pubDate": pub_date,
-            }
+            RssFeedItem(
+                title=f"Rae the Doe {url[-10:]}",
+                link=url,
+                pub_date=pub_date,
+            )
         )
 
-    feed_data = {
-        "title": "Rae the Doe",
-        "description": "Recent comic strips for Rae the Doe",
-        "link": "https://comicskingdom.com/rae-the-doe",
-        "copyright": "CC0 1.0 Universal (CC0 1.0) Public Domain Dedication",
-        "copyrightUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
-        "generator": f"{__package__} v{importlib.metadata.version(__package__)}",
-        "language": "en-us",
-        "lastBuildDate": now(),
-        "pubDate": max(item["pubDate"] for item in items),
-        "ttl": 30,
-        "url": urllib.parse.urljoin(FEED_URL_ORIGIN, "feed.rss"),
-        "items": items,
-    }
-    rss_feed = generate_feed(feed_data)
-    open(FEED_FILE, "w", encoding="utf-8").write(rss_feed)
+    feed = RssFeed(
+        title="Rae the Doe",
+        description="Recent comic strips for Rae the Doe",
+        link="https://comicskingdom.com/rae-the-doe",
+        url=urllib.parse.urljoin(FEED_URL_ORIGIN, "feed.rss"),
+        items=items,
+    )
+    rss_text = pretty_print_xml(feed.to_xml())
+    open(FEED_FILE, "w", encoding="utf-8").write(rss_text)
 
 
 def main() -> None:
