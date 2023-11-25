@@ -2,9 +2,27 @@
 
 import datetime as dt
 import json
+import logging
 from pathlib import Path
 from typing import Any
 import xml.etree.ElementTree as ET
+
+LOGGING_FORMAT = "[%(asctime)s] [%(name)s] [%(levelname)s] %(message)s"
+
+
+def get_logger(name: str) -> logging.Logger:
+    """Returns a logger with the desired configuration.
+
+    Args:
+        name: Name of logger.
+
+    Returns:
+        A logger.
+    """
+    logging.basicConfig(format=LOGGING_FORMAT, level=logging.INFO)
+    logger = logging.getLogger(name)
+    logger.setLevel(logging.DEBUG)
+    return logger
 
 
 def now() -> dt.datetime:

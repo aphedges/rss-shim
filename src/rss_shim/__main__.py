@@ -11,7 +11,9 @@ import requests
 from rss_shim.config import FEED_URL_ORIGIN
 from rss_shim.feed_gen import RssFeed, RssFeedItem
 from rss_shim.paths import CACHE_DIR, FEED_DIR
-from rss_shim.utils import pretty_print_xml, write_json
+from rss_shim.utils import get_logger, pretty_print_xml, write_json
+
+logger = get_logger(__name__)
 
 SHIM_PATH = "comics_kingdom/rae_the_doe"
 
@@ -29,16 +31,16 @@ else:
 
 def scrape_comic() -> None:
     """Scrape _Rae the Doe_ and generate an RSS feed for it."""
-    print(seen_urls)
+    logger.info("Seen URLs: %s", seen_urls)
     page_text = requests.get("https://comicskingdom.com/rae-the-doe", timeout=30).text
     # Parse URL from `<link rel="canonical" href="https://comicskingdom.com/rae-the-doe/2023-03-08" />`
     soup = BeautifulSoup(page_text, features="html.parser")
     canonical_urls = [link["href"] for link in soup.findAll("link", attrs={"rel": "canonical"})]
     if len(set(canonical_urls)) > 1:
-        print(f"WARNING! Multiple canonical URLs found: {canonical_urls}")
+        logger.warning("Multiple canonical URLs found: %s", canonical_urls)
     comic_url = canonical_urls[0]
     if comic_url not in seen_urls:
-        print(f"Found new URL: {comic_url!r}")
+        logger.info("Found new URL: %s", repr(comic_url))
         seen_urls.insert(0, comic_url)
         write_json(seen_urls, CACHE_FILE)
 
@@ -75,10 +77,10 @@ def main() -> None:
     while True:
         try:
             scrape_comic()
-        except Exception as ex:  # pylint: disable=broad-exception-caught
-            print(f"Scraping failed with error: {ex}")
+        except Exception:  # pylint: disable=broad-exception-caught
+            logger.exception("Scraping failed with error:")
         sleep_time = int((30 + random.uniform(-2, 2)) * 60)
-        print(sleep_time)
+        logger.info("Sleeping for %d seconds", sleep_time)
         time.sleep(sleep_time)
 
 
