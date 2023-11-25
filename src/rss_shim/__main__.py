@@ -1,5 +1,6 @@
 """A service to create RSS feeds for sites that do not support them."""
 import datetime as dt
+import importlib.metadata
 import json
 import random
 import time
@@ -10,6 +11,7 @@ import requests
 from rss_shim.config import FEED_URL_ORIGIN
 from rss_shim.feed_gen import generate_feed
 from rss_shim.paths import DATA_DIR
+from rss_shim.utils import now
 
 CACHE_FILE = DATA_DIR / "cache.json"
 FEED_FILE = DATA_DIR / "feed.rss"
@@ -41,7 +43,6 @@ def scrape_comic() -> None:
         items.append(
             {
                 "title": f"Rae the Doe {url[-10:]}",
-                "description": "Here is some text containing an interesting description.",
                 "link": url,
                 "pubDate": pub_date,
             }
@@ -49,12 +50,15 @@ def scrape_comic() -> None:
 
     feed_data = {
         "title": "Rae the Doe",
-        "description": "This is an example of an RSS feed",
+        "description": "Recent comic strips for Rae the Doe",
         "link": "https://comicskingdom.com/rae-the-doe",
-        "copyright": "2020 Example.com All rights reserved",
-        "lastBuildDate": "Mon, 6 Sep 2010 00:01:00 +0000",
-        "pubDate": "Sun, 6 Sep 2009 16:20:00 +0000",
-        "ttl": "1800",
+        "copyright": "CC0 1.0 Universal (CC0 1.0) Public Domain Dedication",
+        "copyrightUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+        "lastBuildDate": now(),
+        "pubDate": max(item["pubDate"] for item in items),
+        "ttl": 30,
+        "language": "en-us",
+        "generator": f"{__package__} v{importlib.metadata.version(__package__)}",
         "url": urllib.parse.urljoin(FEED_URL_ORIGIN, "feed.rss"),
         "items": items,
     }

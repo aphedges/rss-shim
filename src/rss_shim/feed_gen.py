@@ -31,26 +31,38 @@ def generate_feed(feed_data: dict[str, Any]) -> str:
     for item in feed_data["items"]:
         xml_item = ET.Element("item")
         ET.SubElement(xml_item, "title").text = item["title"]
-        ET.SubElement(xml_item, "description").text = item["description"]
+        if item.get("description"):
+            ET.SubElement(xml_item, "description").text = item["description"]
         ET.SubElement(xml_item, "link").text = item["link"]
         ET.SubElement(xml_item, "guid", attrib={"isPermaLink": "true"}).text = item["link"]
         ET.SubElement(xml_item, "pubDate").text = to_rfc822_datetime(item["pubDate"])
         xml_items.append(xml_item)
 
-    rss = ET.Element("rss", attrib={"version": "2.0", "xmlns:atom": "http://www.w3.org/2005/Atom"})
+    rss = ET.Element(
+        "rss",
+        attrib={
+            "version": "2.0",
+            "xmlns:atom": "http://www.w3.org/2005/Atom",
+            "xmlns:creativeCommons": "http://backend.userland.com/creativeCommonsRssModule",
+        },
+    )
     channel = ET.SubElement(rss, "channel")
     ET.SubElement(channel, "title").text = feed_data["title"]
     ET.SubElement(channel, "description").text = feed_data["description"]
     ET.SubElement(channel, "link").text = feed_data["link"]
     ET.SubElement(channel, "copyright").text = feed_data["copyright"]
-    ET.SubElement(channel, "lastBuildDate").text = feed_data["lastBuildDate"]
-    ET.SubElement(channel, "pubDate").text = feed_data["pubDate"]
-    ET.SubElement(channel, "ttl").text = feed_data["ttl"]
+    ET.SubElement(channel, "lastBuildDate").text = to_rfc822_datetime(feed_data["lastBuildDate"])
+    ET.SubElement(channel, "pubDate").text = to_rfc822_datetime(feed_data["pubDate"])
+    ET.SubElement(channel, "ttl").text = str(feed_data["ttl"])
+    ET.SubElement(channel, "language").text = feed_data["language"]
+    ET.SubElement(channel, "generator").text = feed_data["generator"]
+    ET.SubElement(channel, "docs").text = "https://www.rssboard.org/rss-specification"
     ET.SubElement(
         channel,
         "atom:link",
         attrib={"href": feed_data["url"], "rel": "self", "type": "application/rss+xml"},
     )
+    ET.SubElement(channel, "creativeCommons:license").text = feed_data["copyrightUrl"]
     channel.extend(xml_items)
 
     # Pretty print XML
