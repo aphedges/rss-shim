@@ -6,6 +6,7 @@ import random
 import time
 import urllib.parse
 
+from bs4 import BeautifulSoup
 import requests
 
 from rss_shim.config import FEED_URL_ORIGIN
@@ -26,11 +27,12 @@ def scrape_comic() -> None:
     """Scrape _Rae the Doe_ and generate an RSS feed for it."""
     print(seen_urls)
     page_text = requests.get("https://comicskingdom.com/rae-the-doe", timeout=30).text
-    # maybe switch to `<link rel="canonical" href="https://comicskingdom.com/rae-the-doe/2023-03-08" />` instead of `<meta property="og:url" content='https://comicskingdom.com/rae-the-doe/2023-03-08' />`
-    target_tag = [
-        line for line in page_text.splitlines() if line.startswith('<meta property="og:url"')
-    ][0]
-    comic_url = target_tag[target_tag.find("'") + 1 : target_tag.rfind("'")]
+    # Parse URL from `<link rel="canonical" href="https://comicskingdom.com/rae-the-doe/2023-03-08" />`
+    soup = BeautifulSoup(page_text, features="html.parser")
+    canonical_urls = [link["href"] for link in soup.findAll("link", attrs={"rel": "canonical"})]
+    if len(set(canonical_urls)) > 1:
+        print(f"WARNING! Multiple canonical URLs found: {canonical_urls}")
+    comic_url = canonical_urls[0]
     if comic_url not in seen_urls:
         print(f"Found new URL: {comic_url!r}")
         seen_urls.insert(0, comic_url)
