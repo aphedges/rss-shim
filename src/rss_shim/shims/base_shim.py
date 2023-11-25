@@ -9,6 +9,9 @@ import urllib.parse
 from rss_shim.config import FEED_URL_ORIGIN
 from rss_shim.feed_gen import RssFeed
 from rss_shim.paths import CACHE_DIR, FEED_DIR
+from rss_shim.utils import get_logger, pretty_print_xml
+
+logger = get_logger(__name__)
 
 
 @dataclass
@@ -67,3 +70,12 @@ class BaseShim(ABC):
             An instantiated RssFeed object.
         """
         raise NotImplementedError
+
+    def run(self) -> None:
+        """Generate an RSS feed and write it to the disk."""
+        try:
+            feed = self.generate_feed()
+            rss_text = pretty_print_xml(feed.to_xml())
+            self.feed_file.write_text(rss_text, encoding="utf-8")
+        except Exception:  # pylint: disable=broad-exception-caught
+            logger.exception("Scraping failed with error:")
