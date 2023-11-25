@@ -10,11 +10,16 @@ import requests
 
 from rss_shim.config import FEED_URL_ORIGIN
 from rss_shim.feed_gen import RssFeed, RssFeedItem
-from rss_shim.paths import DATA_DIR
+from rss_shim.paths import CACHE_DIR, FEED_DIR
 from rss_shim.utils import pretty_print_xml, write_json
 
-CACHE_FILE = DATA_DIR / "cache.json"
-FEED_FILE = DATA_DIR / "feed.rss"
+SHIM_PATH = "comics_kingdom/rae_the_doe"
+
+CACHE_FILE = CACHE_DIR / f"{SHIM_PATH}.json"
+FEED_FILE = FEED_DIR / f"{SHIM_PATH}.rss"
+
+CACHE_FILE.parent.mkdir(parents=True, exist_ok=True)
+FEED_FILE.parent.mkdir(parents=True, exist_ok=True)
 
 if CACHE_FILE.is_file():
     seen_urls = json.loads(CACHE_FILE.read_text(encoding="utf-8"))
@@ -53,7 +58,7 @@ def scrape_comic() -> None:
         title="Rae the Doe",
         description="Recent comic strips for Rae the Doe",
         link="https://comicskingdom.com/rae-the-doe",
-        url=urllib.parse.urljoin(FEED_URL_ORIGIN, "feed.rss"),
+        url=urllib.parse.urljoin(FEED_URL_ORIGIN, str(FEED_FILE.relative_to(FEED_DIR))),
         items=items,
     )
     rss_text = pretty_print_xml(feed.to_xml())
