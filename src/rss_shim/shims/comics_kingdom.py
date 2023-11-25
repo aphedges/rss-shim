@@ -49,7 +49,9 @@ class ComicsKingdomShim(BaseShim):
         page_text = response.text
         # Parse URL from `<link rel="canonical" href="https://comicskingdom.com/rae-the-doe/2023-03-08" />`
         soup = BeautifulSoup(page_text, features="html.parser")
-        canonical_urls = [link["href"] for link in soup.findAll("link", attrs={"rel": "canonical"})]
+        canonical_urls = [
+            link["href"] for link in soup.find_all("link", attrs={"rel": "canonical"})
+        ]
         if len(set(canonical_urls)) > 1:
             logger.warning("Multiple canonical URLs found: %s", canonical_urls)
         comic_strip_url = canonical_urls[0]
