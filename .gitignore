@@ -1,7 +1,18 @@
 # Project files
 /data/
 
+# JetBrains IDE files
+.idea/
+
+# macOS files
+.DS_Store
+
 # Python files
-/.mypy_cache/
+*.egg-info/
+.mypy_cache/
+.python-version
+.ruff_cache/
 __pycache__/
-rss_shim.egg-info/
+
+# Other files
+.envrc

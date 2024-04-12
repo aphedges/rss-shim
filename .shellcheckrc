@@ -1,0 +1,3 @@
+enable=add-default-case # https://github.com/koalaman/shellcheck/wiki/SC2249
+enable=avoid-nullary-conditions # https://github.com/koalaman/shellcheck/wiki/SC2244
+enable=require-double-brackets # https://github.com/koalaman/shellcheck/wiki/SC2292

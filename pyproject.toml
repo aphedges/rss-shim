@@ -8,18 +8,10 @@ target-version = ["py311"]
 
 [tool.codespell]
 ignore-regex = "\\[nt]" # Do not count escaped newlines or tabs as part of a word
-# ignore-words-list = ""
+ignore-words-list = "astroid" # Dependency of pylint
 quiet-level = 0 # Display all warnings
 check-filenames = ""
 check-hidden = ""
-
-[tool.isort]
-py_version = "311"
-line_length = 100
-atomic = true
-combine_as_imports = true
-force_sort_within_sections = true
-profile = "black"
 
 [tool.mypy]
 show_error_codes = true
@@ -28,12 +20,37 @@ python_version = "3.11"
 strict = true
 warn_unreachable = true
 
-[tool.pydocstyle]
+[tool.ruff]
+fix = true
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+ignore-init-module-imports = true
+select = [
+  "B", # flake8-bugbear
+  "D", # pydocstyle
+  "E", # pycodestyle error
+  "F", # pyflakes
+  "I", # isort
+  "UP", # pyupgrade
+  "W", # pycodestyle warning
+]
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+force-sort-within-sections = true
+
+[tool.ruff.lint.pycodestyle]
+# Detect extra-long lines that Black can't handle
+max-line-length = 250
+
+[tool.ruff.lint.pydocstyle]
 convention = "google"
 
 [tool.pylint.format]
-# Let Black handle line length
-max-line-length = 300
+# Let other tools handle line length
+max-line-length = 250
 
 [tool.pylint.imports]
 # Need to either set this or stop using the `import X as X` that mypy wants
