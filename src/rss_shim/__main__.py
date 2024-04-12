@@ -2,7 +2,7 @@
 import random
 import time
 
-from rss_shim.shims import AstralShim, ComicsKingdomShim
+from rss_shim.shims import AstralShim
 from rss_shim.utils import get_logger
 
 logger = get_logger(__name__)
@@ -12,7 +12,6 @@ def main() -> None:
     """Scrape sites repeatedly, handling errors and waiting as needed."""
     shims = [
         AstralShim(),
-        ComicsKingdomShim("rae-the-doe", "Rae the Doe"),
     ]
     while True:
         for shim in shims:
