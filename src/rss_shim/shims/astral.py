@@ -1,4 +1,5 @@
 """Shim for the blog of Astral, the company that develops Ruff."""
+
 from dataclasses import dataclass
 import datetime as dt
 import re

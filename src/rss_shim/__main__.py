@@ -1,4 +1,5 @@
 """A service to create RSS feeds for sites that do not support them."""
+
 import random
 import time
 
