@@ -97,3 +97,11 @@ upgrade:
 .PHONY: install
 install:
 	make update
+
+TAG ?= latest
+
+.PHONY: build
+build:
+	docker build \
+		--tag rss-shim:$(TAG) \
+		.

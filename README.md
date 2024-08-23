@@ -4,10 +4,10 @@ rss-shim is a web server to provide RSS feeds for data that do not already have 
 
 ## Installation
 
-Build the Docker image and deploy it where desired:
+Build the OCI image and deploy it where desired:
 
 ```bash
-docker build -t rss-shim .
+make build
 ```
 
 ## Usage
