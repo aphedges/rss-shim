@@ -1,4 +1,5 @@
 """A module for generating RSS feeds."""
+
 from dataclasses import dataclass, field
 import datetime as dt
 import importlib.metadata
@@ -84,9 +85,9 @@ class RssFeed:
         if self.url:
             rss_attribs["xmlns:atom"] = "http://www.w3.org/2005/Atom"
         if self.copyright_url:
-            rss_attribs[
-                "xmlns:creativeCommons"
-            ] = "http://backend.userland.com/creativeCommonsRssModule"
+            rss_attribs["xmlns:creativeCommons"] = (
+                "http://backend.userland.com/creativeCommonsRssModule"
+            )
         xml_rss = ET.Element("rss", attrib=rss_attribs)
         channel = ET.SubElement(xml_rss, "channel")
         ET.SubElement(channel, "title").text = self.title

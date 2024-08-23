@@ -1,4 +1,5 @@
 """Abstract base class for shims."""
+
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 import json

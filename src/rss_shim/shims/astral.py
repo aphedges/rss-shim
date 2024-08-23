@@ -1,4 +1,5 @@
 """Shim for the blog of Astral, the company that develops Ruff."""
+
 from dataclasses import dataclass
 import datetime as dt
 import re
@@ -46,8 +47,7 @@ class AstralShim(BaseShim):
 
             blog_date = blog_post.find("p", attrs={"class": "subtitle text-comet"}).text
             blog_date = re.sub(r"\s+", " ", blog_date.strip())
-            pub_date = dt.datetime.strptime(blog_date, "%B %d, %Y")
-            pub_date = pub_date.replace(tzinfo=dt.UTC)
+            pub_date = dt.datetime.strptime(blog_date, "%B %d, %Y").replace(tzinfo=dt.UTC)
 
             items.append(
                 RssFeedItem(
