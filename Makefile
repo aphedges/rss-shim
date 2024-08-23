@@ -38,6 +38,10 @@ black:
 codespell:
 	pre-commit run --all-files codespell
 
+.PHONY: hadolint
+hadolint:
+	pre-commit run --all-files hadolint
+
 .PHONY: lychee
 lychee:
 	pre-commit run --all-files --hook-stage manual lychee
