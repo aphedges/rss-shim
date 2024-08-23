@@ -1,6 +1,51 @@
 [build-system]
-requires = ["setuptools>=51.0.0"] # Minimum version required to use `entry_points`
+requires = ["setuptools>=66.1"] # Minimum version that properly bundles `file:`s in sdists
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "rss-shim"
+version = "0.0.1"
+description = "A package to create RSS feeds for sites that do not support them."
+readme = "README.md"
+authors = [
+  { name = "Alex Hedges" },
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Console",
+  "Intended Audience :: System Administrators",
+  "License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: Communications",
+  "Topic :: Internet",
+  "Topic :: Software Development :: Libraries",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Topic :: Utilities",
+  "Typing :: Typed",
+]
+# Required for writing union types as `X | Y`
+requires-python = ">=3.10"
+license = { text = "CC0-1.0" }
+dynamic = ["dependencies"]
+
+[project.optional-dependencies]
+dev = [
+  "mypy",
+  "pre-commit",
+  "pylint",
+  "types-requests",
+]
+
+[project.scripts]
+rss-shim = "rss_shim.__main__:main"
+
+[project.urls]
+Homepage = "https://github.com/aphedges/rss-shim"
+
+[tool.setuptools.dynamic]
+dependencies = { file = "requirements.txt" }
 
 [tool.black]
 line-length = 100
