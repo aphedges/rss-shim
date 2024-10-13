@@ -10,6 +10,11 @@ on:
       - test-ci**
   workflow_dispatch: # Enable workflow to be run manually
 
+# Disable all access to the GitHub API by default
+# This default can be overridden for individual workflows and jobs
+# Documentation: https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#permissions
+permissions: {}
+
 # Cancel the currently running CI job if you push a change while CI is running
 # Documentation: https://docs.github.com/en/actions/using-jobs/using-concurrency
 concurrency:
@@ -18,10 +23,10 @@ concurrency:
 
 jobs:
   checks:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-22.04 # Pinned version of `ubuntu-latest`
     name: Run checks
     env:
-      PYTHON_VERSION: 3.11.9
+      PYTHON_VERSION: 3.12.7
     defaults:
       run:
         shell: bash -leo pipefail {0}

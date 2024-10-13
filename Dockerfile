@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+FROM python:3.12.7-alpine3.20
 
 WORKDIR /app
 
@@ -14,4 +14,4 @@ COPY pyproject.toml .
 COPY src/ src/
 RUN pip install --no-cache-dir --no-deps . -c requirements-lock.txt
 
-CMD ["/bin/bash", "-c", "python -u -m rss_shim"]
+CMD ["/bin/sh", "-c", "python -u -m rss_shim"]
