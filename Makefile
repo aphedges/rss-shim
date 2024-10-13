@@ -38,6 +38,10 @@ black:
 codespell:
 	pre-commit run --all-files codespell
 
+.PHONY: lychee
+lychee:
+	pre-commit run --all-files --hook-stage manual lychee
+
 .PHONY: markdownlint
 markdownlint:
 	pre-commit run --all-files markdownlint
