@@ -32,7 +32,7 @@ dynamic = ["dependencies"]
 
 [project.optional-dependencies]
 dev = [
-  "mypy",
+  "mypy[faster-cache]>=1.13",
   "pre-commit",
   "pylint",
   "types-requests",
@@ -121,6 +121,12 @@ ignore = [
   # Most code we work with is not cryptographically sensitive,
   # so the `random` module is safe to use
   "S311", # suspicious-non-cryptographic-random-usage (from flake8-bandit)
+  # Allow parsing XML from untrusted sources
+  # The Python documentation (https://docs.python.org/3.13/library/xml.html#xml-vulnerabilities)
+  # states that the vulnerabilities are denial-of-service attacks, which are not much of a concern
+  # to us. In addition, the vulnerabilities are in Expat itself, so these vulnerabilities have been
+  # patched when using recent versions of the library.
+  "S314", # suspicious-xml-element-tree-usage (from flake8-bandit)
   # Ternary expressions are often less readable than `if`-`else` blocks,
   # so they should not be required
   "SIM108", # if-else-block-instead-of-if-exp (from flake8-simplify)
@@ -152,13 +158,17 @@ allow-reexport-from-package = true
 # - `missing-module-docstring`, `missing-class-docstring`,
 #   `missing-function-docstring` when using `pydocstyle`
 # Disabled `consider-using-f-string` because handled by `pyupgrade`
-# Disabled `logging-not-lazy` because handled by `flake8-logging-format`
+# Disabled because handled by `flake8-logging-format`:
+# - `logging-format-interpolation`
+# - `logging-fstring-interpolation`
+# - `logging-not-lazy`
 # Disabled `broad-exception-caught` because handled by `flake8-blind-except`
 disable = """
 R,fixme,no-member,unsupported-membership-test,unsubscriptable-object,
 unsupported-assignment-operation,not-an-iterable,too-many-lines,wrong-import-order,
 missing-module-docstring,missing-class-docstring,missing-function-docstring,
-consider-using-f-string,logging-not-lazy,broad-exception-caught
+consider-using-f-string,logging-format-interpolation,logging-fstring-interpolation,logging-not-lazy,
+broad-exception-caught
 """
 
 [tool.pylint.reports]
