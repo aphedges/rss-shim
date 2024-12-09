@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-22.04 # Pinned version of `ubuntu-latest`
     name: Run checks
     env:
-      PYTHON_VERSION: 3.12.7
+      PYTHON_VERSION: 3.12.8
     defaults:
       run:
         shell: bash -leo pipefail {0}
