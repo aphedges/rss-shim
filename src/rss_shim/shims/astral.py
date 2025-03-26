@@ -42,7 +42,7 @@ class AstralShim(BaseShim):
             raise ValueError(
                 f"Blog URL {self.blog_url!r} does not contain `<div>` with `id` of `Blog`"
             )
-        blog_posts = blog_div.findAll("a", attrs={"href": True})  # type: ignore[attr-defined]
+        blog_posts = blog_div.find_all("a", attrs={"href": True})  # type: ignore[attr-defined]
         items = []
         for blog_post in blog_posts:
             blog_title = blog_post.find("h3", attrs={"class": "text-h5"}).text
