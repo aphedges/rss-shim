@@ -11,7 +11,10 @@ dev = [
 ]
 
 [build-system]
-requires = ["setuptools>=69.0.0"] # Minimum version that includes `py.typed` in build output automatically
+requires = [
+  # Minimum version that supports PEP 639 – Improving License Clarity with Better Package Metadata
+  "setuptools>=77",
+]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -26,7 +29,6 @@ classifiers = [
   "Development Status :: 3 - Alpha",
   "Environment :: Console",
   "Intended Audience :: System Administrators",
-  "License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication",
   "Operating System :: OS Independent",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3 :: Only",
@@ -38,7 +40,7 @@ classifiers = [
   "Typing :: Typed",
 ]
 requires-python = ">=3.13"
-license = { text = "CC0-1.0" }
+license = "CC0-1.0"
 dependencies = [
   "beautifulsoup4",
   # Use charset_normalizer to avoid license issues
