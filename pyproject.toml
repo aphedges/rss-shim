@@ -37,8 +37,7 @@ classifiers = [
   "Topic :: Utilities",
   "Typing :: Typed",
 ]
-# Required for writing union types as `X | Y`
-requires-python = ">=3.10"
+requires-python = ">=3.13"
 license = { text = "CC0-1.0" }
 dependencies = [
   "beautifulsoup4",
@@ -70,7 +69,7 @@ enable_error_code = [
   "truthy-bool",
 ]
 ignore_missing_imports = true
-python_version = "3.11"
+python_version = "3.13"
 strict = true
 warn_unreachable = true
 
