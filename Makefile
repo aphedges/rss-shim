@@ -100,6 +100,6 @@ TAG ?= latest
 
 .PHONY: build
 build:
-	docker build \
+	docker buildx build \
 		--tag rss-shim:$(TAG) \
 		.
