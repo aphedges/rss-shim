@@ -38,7 +38,11 @@ class AstralShim(BaseShim):
 
         soup = BeautifulSoup(page_text, features="html.parser")
         blog_div = soup.find("div", attrs={"id": "Blog"})
-        blog_posts = blog_div.findAll("a", attrs={"href": True})
+        if blog_div is None:
+            raise ValueError(
+                f"Blog URL {self.blog_url!r} does not contain `<div>` with `id` of `Blog`"
+            )
+        blog_posts = blog_div.find_all("a", attrs={"href": True})  # type: ignore[attr-defined]
         items = []
         for blog_post in blog_posts:
             blog_title = blog_post.find("h3", attrs={"class": "text-h5"}).text

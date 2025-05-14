@@ -6,7 +6,7 @@ rss-shim is a web server to provide RSS feeds for data that do not already have 
 
 Build the OCI image and deploy it where desired:
 
-```bash
+```shell
 make build
 ```
 

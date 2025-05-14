@@ -1,5 +1,20 @@
+[dependency-groups]
+dev = [
+  # `mypy` `1.13.0` introduced `faster-cache` extra
+  "mypy[faster-cache]>=1.13",
+  # `pre-commit` `1.15.0` introduced `minimum_pre_commit_version` top-level key
+  "pre-commit>=1.15.0",
+  # Set a minimum version (released 2023-10-02, first to support `3.12`)
+  # to prevent possible resolution problems
+  "pylint>=3",
+  "types-requests",
+]
+
 [build-system]
-requires = ["setuptools>=69.0.0"] # Minimum version that includes `py.typed` in build output automatically
+requires = [
+  # Minimum version that supports PEP 639 – Improving License Clarity with Better Package Metadata
+  "setuptools>=77",
+]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -14,7 +29,6 @@ classifiers = [
   "Development Status :: 3 - Alpha",
   "Environment :: Console",
   "Intended Audience :: System Administrators",
-  "License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication",
   "Operating System :: OS Independent",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3 :: Only",
@@ -25,27 +39,19 @@ classifiers = [
   "Topic :: Utilities",
   "Typing :: Typed",
 ]
-# Required for writing union types as `X | Y`
-requires-python = ">=3.10"
-license = { text = "CC0-1.0" }
-dynamic = ["dependencies"]
-
-[project.optional-dependencies]
-dev = [
-  "mypy[faster-cache]>=1.13",
-  "pre-commit",
-  "pylint",
-  "types-requests",
+requires-python = ">=3.13"
+license = "CC0-1.0"
+dependencies = [
+  "beautifulsoup4",
+  # Use charset_normalizer to avoid license issues
+  "requests>=2.26.0",
 ]
 
 [project.scripts]
 rss-shim = "rss_shim.__main__:main"
 
 [project.urls]
-Homepage = "https://github.com/aphedges/rss-shim"
-
-[tool.setuptools.dynamic]
-dependencies = { file = "requirements.txt" }
+homepage = "https://github.com/aphedges/rss-shim"
 
 [tool.black]
 line-length = 100
@@ -59,9 +65,13 @@ check-filenames = ""
 check-hidden = ""
 
 [tool.mypy]
-show_error_codes = true
+enable_error_code = [
+  "ignore-without-code",
+  "redundant-expr",
+  "truthy-bool",
+]
 ignore_missing_imports = true
-python_version = "3.11"
+python_version = "3.13"
 strict = true
 warn_unreachable = true
 
@@ -112,6 +122,18 @@ select = [
   "YTT", # flake8-2020
 ]
 ignore = [
+  # Do not prohibit f-strings in logging messages
+  # The documentation describes two motivations, but I (@aphedges) disagree with both:
+  # - Using f-strings means that string formatting is carried out eagerly, but
+  #   f-string formatting takes such a short time that optimizing it away isn't worth it.
+  # - Passing in arguments means that they can be used by other logging handlers
+  #   (e.g., structured logging), but our logging is *significantly* simpler than that.
+  # In addition, I personally was avoiding using f-strings for logging because of documented
+  # security concerns, but at the time of writing, I was unable to find an exploit that would
+  # actually affect us. Finally, the native formatting used by the `logging` module is ancient,
+  # so it cannot express some formats that f-strings can. In all, I believe that enforcing the use
+  # of the `logging` module's default formatter is not worth the inconveniences it causes.
+  "G004", # logging-f-string (from flake8-logging-format)
   # Do not switch to `Path.open()` because `open()` is easier to test with
   # e.g., `open(data_dir / "file_a.txt")` -> `open("test/file_b.txt")`
   "PTH123", # builtin-open (from flake8-use-pathlib)
