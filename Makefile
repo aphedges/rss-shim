@@ -4,8 +4,6 @@ default:
 
 SHELL=/usr/bin/env bash
 
-PYTHON_FILES=$(shell git ls-files '*.py' | sort | tr '\n' ' ')
-
 export PYTHONPATH := $(shell realpath .)
 
 .PHONY: lock
@@ -48,9 +46,7 @@ markdownlint:
 
 .PHONY: mypy
 mypy:
-ifneq ($(PYTHON_FILES),)
-	mypy $(PYTHON_FILES)
-endif
+	pre-commit run --all-files mypy
 
 .PHONY: prettier
 prettier:
@@ -58,9 +54,7 @@ prettier:
 
 .PHONY: pylint
 pylint:
-ifneq ($(PYTHON_FILES),)
-	pylint $(PYTHON_FILES)
-endif
+	pre-commit run --all-files pylint
 
 .PHONY: ruff
 ruff:
@@ -83,7 +77,7 @@ precommit:
 	pre-commit run --all-files
 
 .PHONY: check
-check: precommit mypy pylint
+check: precommit
 
 .PHONY: fix
 fix: lock check
@@ -91,16 +85,16 @@ fix: lock check
 .PHONY: update
 update:
 	pip install --upgrade pip
-	pip install --upgrade -e .[dev] -r requirements-lock.txt
+	pip install --upgrade -e . --group dev -r requirements-lock.txt
 
 .PHONY: upgrade
 upgrade:
 	pip install --upgrade pip
-	pip install --upgrade --upgrade-strategy eager -e .[dev]
+	pip install --upgrade --upgrade-strategy eager -e . --group dev
 
 .PHONY: install
 install:
-	make update
+	$(MAKE) update
 
 TAG ?= latest
 
