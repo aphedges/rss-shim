@@ -40,16 +40,17 @@ classifiers = [
 # Required for writing union types as `X | Y`
 requires-python = ">=3.10"
 license = { text = "CC0-1.0" }
-dynamic = ["dependencies"]
+dependencies = [
+  "beautifulsoup4",
+  # Use charset_normalizer to avoid license issues
+  "requests>=2.26.0",
+]
 
 [project.scripts]
 rss-shim = "rss_shim.__main__:main"
 
 [project.urls]
 Homepage = "https://github.com/aphedges/rss-shim"
-
-[tool.setuptools.dynamic]
-dependencies = { file = "requirements.txt" }
 
 [tool.black]
 line-length = 100

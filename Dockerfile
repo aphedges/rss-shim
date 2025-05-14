@@ -5,15 +5,16 @@ FROM python:3.12.10-alpine3.21
 WORKDIR /app
 
 # Install dependencies
-COPY requirements.txt .
+COPY pyproject.toml .
 COPY requirements-lock.txt .
-RUN pip install --no-cache-dir -r requirements.txt -c requirements-lock.txt
+RUN pip install --no-cache-dir -e . -c requirements-lock.txt
 
-# Copy over and install application
+# Copy remaining files
 COPY LICENSE .
 COPY README.md .
-COPY pyproject.toml .
 COPY src/ src/
-RUN pip install --no-cache-dir --no-deps . -c requirements-lock.txt
+
+# Re-install so `pip` stores all metadata properly
+RUN pip install --no-cache-dir --no-deps -e .
 
 CMD ["/bin/sh", "-c", "python -u -m rss_shim"]
