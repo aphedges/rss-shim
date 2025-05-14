@@ -51,7 +51,7 @@ dependencies = [
 rss-shim = "rss_shim.__main__:main"
 
 [project.urls]
-Homepage = "https://github.com/aphedges/rss-shim"
+homepage = "https://github.com/aphedges/rss-shim"
 
 [tool.black]
 line-length = 100
