@@ -3,7 +3,7 @@
 from dataclasses import dataclass
 import datetime as dt
 import re
-from typing import ClassVar
+from typing import ClassVar, cast
 
 from bs4 import BeautifulSoup
 import requests
@@ -53,7 +53,7 @@ class AstralShim(BaseShim):
             if blog_description_element is None:
                 raise ValueError(f"Cannot find blog description element in {self.blog_url!r}")
             blog_description = blog_description_element.text
-            blog_url = blog_post["href"]
+            blog_url = cast(str, blog_post["href"])
 
             blog_date_element = blog_post.find("p", attrs={"class": "subtitle text-comet"})
             if blog_date_element is None:
