@@ -42,14 +42,23 @@ class AstralShim(BaseShim):
             raise ValueError(
                 f"Blog URL {self.blog_url!r} does not contain `<div>` with `id` of `Blog`"
             )
-        blog_posts = blog_div.find_all("a", attrs={"href": True})  # type: ignore[attr-defined]
+        blog_posts = blog_div.find_all("a", attrs={"href": True})
         items = []
         for blog_post in blog_posts:
-            blog_title = blog_post.find("h3", attrs={"class": "text-h5"}).text
-            blog_description = blog_post.find("p", attrs={"class": "body-m text-comet"}).text
+            blog_title_element = blog_post.find("h3", attrs={"class": "text-h5"})
+            if blog_title_element is None:
+                raise ValueError(f"Cannot find blog title element in {self.blog_url!r}")
+            blog_title = blog_title_element.text
+            blog_description_element = blog_post.find("p", attrs={"class": "body-m text-comet"})
+            if blog_description_element is None:
+                raise ValueError(f"Cannot find blog description element in {self.blog_url!r}")
+            blog_description = blog_description_element.text
             blog_url = blog_post["href"]
 
-            blog_date = blog_post.find("p", attrs={"class": "subtitle text-comet"}).text
+            blog_date_element = blog_post.find("p", attrs={"class": "subtitle text-comet"})
+            if blog_date_element is None:
+                raise ValueError(f"Cannot find blog date element in {self.blog_url!r}")
+            blog_date = blog_date_element.text
             blog_date = re.sub(r"\s+", " ", blog_date.strip())
             pub_date = dt.datetime.strptime(blog_date, "%B %d, %Y").replace(tzinfo=dt.UTC)
 
