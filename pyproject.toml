@@ -12,7 +12,7 @@ dev = [
 
 [build-system]
 requires = [
-  # Minimum version that supports PEP 639 – Improving License Clarity with Better Package Metadata
+  # Minimum version that supports PEP 639 - Improving License Clarity with Better Package Metadata
   "setuptools>=77",
 ]
 build-backend = "setuptools.build_meta"
