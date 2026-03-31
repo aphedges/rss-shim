@@ -26,16 +26,19 @@ jobs:
     runs-on: ubuntu-22.04 # Pinned version of `ubuntu-latest`
     name: Run checks
     env:
-      PYTHON_VERSION: 3.13.3
+      PYTHON_VERSION: 3.13.12
     defaults:
       run:
         shell: bash -leo pipefail {0}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
+        with:
+          # Prevent credentials from being accidentally used in other steps
+          persist-credentials: false
 
       - name: Initialize Python environment
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: pip
@@ -45,7 +48,7 @@ jobs:
           make update
 
       - name: Cache pre-commit environments
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/pre-commit
           key: precommit--${{ runner.os }}--${{ runner.arch }}--${{ env.PYTHON_VERSION }}--${{ hashFiles('.pre-commit-config.yaml') }}

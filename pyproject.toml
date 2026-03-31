@@ -53,9 +53,6 @@ rss-shim = "rss_shim.__main__:main"
 [project.urls]
 homepage = "https://github.com/aphedges/rss-shim"
 
-[tool.black]
-line-length = 100
-
 [tool.codespell]
 ignore-regex = "\\[nt]" # Do not count escaped newlines or tabs as part of a word
 # `astroid` is a dependency of pylint

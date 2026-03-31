@@ -2,6 +2,12 @@
 # https://www.shellcheck.net/wiki/SC2249
 enable=add-default-case
 
+# "Use `-n` instead of `! -z`."
+# https://www.shellcheck.net/wiki/SC2236
+# "Use `[ -n .. ]` instead of `! [ -z .. ]`."
+# https://www.shellcheck.net/wiki/SC2237
+enable=avoid-negated-conditions
+
 # "Prefer explicit `-n` to check non-empty string (or use `=`/`-ne` to check boolean/integer)."
 # https://www.shellcheck.net/wiki/SC2244
 enable=avoid-nullary-conditions
@@ -9,6 +15,10 @@ enable=avoid-nullary-conditions
 # "Prefer `[[ ]]` over `[ ]` for tests in Bash/Ksh."
 # https://www.shellcheck.net/wiki/SC2292
 enable=require-double-brackets
+
+# "Useless cat. Consider `cmd < file | ..` or `cmd file | ..` instead."
+# https://www.shellcheck.net/wiki/SC2002
+enable=useless-use-of-cat
 
 # "Can't follow non-constant source. Use a directive to specify location"
 # https://www.shellcheck.net/wiki/SC1090
