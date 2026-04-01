@@ -12,7 +12,13 @@ make build
 
 ## Usage
 
-todo no server, just writes to output file, this is just a daemon, make some changes
+The daemon writes feeds to an output directory, which can then be served by other software.
+
+To start the daemon, run the following command:
+
+```shell
+python -m rss_shim
+```
 
 ## Contributing
 
