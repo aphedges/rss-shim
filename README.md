@@ -1,6 +1,6 @@
 # rss-shim
 
-rss-shim is a web server to provide RSS feeds for data that do not already have one.
+rss-shim is a daemon to generate RSS feeds for data that do not already have one.
 
 ## Installation
 
@@ -12,7 +12,7 @@ make build
 
 ## Usage
 
-Currently, the server provides a single feed, `feed.rss`, from port 80. I will be changing this in the future.
+todo no server, just writes to output file, this is just a daemon, make some changes
 
 ## Contributing
 
